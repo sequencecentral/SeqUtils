@@ -1,5 +1,6 @@
 #! /usr/local/bin/python
-from smtplib import SMTP_SSL as SMTP       # this invokes the secure SMTP protocol (port 465, uses SSL)
+# from smtplib import SMTP_SSL as SMTP       # this invokes the secure SMTP protocol (port 465, uses SSL)
+from smtplib import SMTP_SSL, SMTP       # this invokes the secure SMTP protocol (port 465, uses SSL)
 from email.mime.text import MIMEText
 try:
     from . import auth
@@ -14,7 +15,11 @@ def send(**kwargs):
         params = auth.load_default_auth()
     SMTPserver = params['SMTPserver']
     USERNAME = params['USERNAME']
-    PASSWORD = params['PASSWORD']
+    if('PASSWORD' in params): 
+        PASSWORD = params['PASSWORD']
+    else:
+        print("[Warning!] No password specified!")
+        PASSWORD = ''
     #fail sender to username if not provided
     if('sender' in params): sender = params['sender']
     else: sender = params['USERNAME']
@@ -45,9 +50,16 @@ def send(**kwargs):
     msg = MIMEText(content, text_subtype)
     msg['Subject']= subject
     msg['From']   = sender # some SMTP servers will do this automatically, not all
-    conn = SMTP(SMTPserver)
-    conn.set_debuglevel(False)
-    conn.login(USERNAME, PASSWORD)
+
+    try:
+        conn = SMTP_SSL(SMTPserver)
+        conn.set_debuglevel(False)
+        conn.login(USERNAME, PASSWORD)
+    except:
+        print("Unable to authenticate with secure SMTP with SSL. Trying SMTP.")
+        conn = SMTP(SMTPserver)
+        conn.set_debuglevel(False)
+        conn.login(USERNAME, PASSWORD)
     try:
         conn.sendmail(sender, destination, msg.as_string())
     except:
