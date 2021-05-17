@@ -19,12 +19,15 @@ setup(
     author='Steve Ayers, Ph.D.',
     author_email='steve@sequenccecentral.com',
     # install_requires=[],
-    version='1.0.4',
+    version='1.0.5',
     license='MIT',
     # packages=['synchronicity','synchronicity.quotewidget'],
-    packages = find_packages(),
+    # packages = find_packages(),
+    packages = [
+        'sequtils'
+    ],
     include_package_data = True,
-    package_data={'': ['config.json','sources.json']},
+    # package_data={'': ['config.json','sources.json']},
     # Needed to actually package something
     # Needed for dependencies
     # install_requires=[''],

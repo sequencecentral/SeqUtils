@@ -19,7 +19,7 @@ def send(**kwargs):
         PASSWORD = params['PASSWORD']
     else:
         print("[Warning!] No password specified!")
-        PASSWORD = ''
+        PASSWORD = None
     #fail sender to username if not provided
     if('sender' in params): sender = params['sender']
     else: sender = params['USERNAME']
@@ -51,16 +51,23 @@ def send(**kwargs):
     msg['Subject']= subject
     msg['From']   = sender # some SMTP servers will do this automatically, not all
 
-    try:
-        conn = SMTP_SSL(SMTPserver)
-        conn.set_debuglevel(False)
-        conn.login(USERNAME, PASSWORD)
-    except:
-        print("Unable to authenticate with secure SMTP with SSL. Trying SMTP.")
+    if(PASSWORD):
+        try:
+            conn = SMTP_SSL(SMTPserver)
+            # conn.set_debuglevel(False)
+            conn.login(USERNAME, PASSWORD)
+        except:
+            print("Unable to authenticate with secure SMTP with SSL. Trying SMTP.")
+            try:
+                conn = SMTP(SMTPserver)
+                conn.login(USERNAME, PASSWORD)
+            except:
+                conn = SMTP(SMTPserver)
+    else:
+        print("Trying without authenticating.")
         conn = SMTP(SMTPserver)
-        conn.set_debuglevel(False)
-        conn.login(USERNAME, PASSWORD)
     try:
+        print("Sending message")
         conn.sendmail(sender, destination, msg.as_string())
     except:
         raise Exception("[Error] Unable to send message")
