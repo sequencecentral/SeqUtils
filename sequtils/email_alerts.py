@@ -5,7 +5,10 @@ from email.mime.text import MIMEText
 try:
     from . import auth
 except:
-    import auth
+    try:
+        import auth
+    except:
+        print("Failed to import auth")
 
 def send(**kwargs):
     if('auth' in kwargs):
