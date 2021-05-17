@@ -5,6 +5,7 @@ git commit -am 'pypi upload'
 git push
 
 #make an egg
+python setup.py bdist
 python setup.py bdist_egg
 
 #make pypi dist
