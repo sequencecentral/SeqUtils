@@ -2,20 +2,19 @@
 # from smtplib import SMTP_SSL as SMTP       # this invokes the secure SMTP protocol (port 465, uses SSL)
 from smtplib import SMTP_SSL, SMTP       # this invokes the secure SMTP protocol (port 465, uses SSL)
 from email.mime.text import MIMEText
-try:
-    from . import auth
-except:
-    try:
-        import auth
-    except:
-        print("Failed to import auth")
+# try:
+#     from . import auth
+# except:
+#     try:
+#         import auth
+#     except:
+#         print("Failed to import auth")
 
-def send(**kwargs):
+def send(*args,**kwargs):
     if('auth' in kwargs):
         params = kwargs['auth']
     else:
-        print("Auth not specified. Trying to load auth")
-        params = auth.load_default_auth()
+        params = args[0]
     SMTPserver = params['SMTPserver']
     USERNAME = params['USERNAME']
     if('PASSWORD' in params): 
