@@ -23,7 +23,10 @@ def send(**kwargs):
     #fail sender to username if not provided
     if('sender' in params): sender = params['sender']
     else: sender = params['USERNAME']
-    text_subtype = 'plain'
+    if('type' in kwargs):
+        text_subtype = kwargs['type']
+    else:
+        text_subtype = 'plain'
 
     #compose message
     if('destination' in kwargs):

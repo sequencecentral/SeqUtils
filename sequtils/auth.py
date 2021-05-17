@@ -1,5 +1,6 @@
 import os
 import json
+import environ
 os.environ['PYTHON_EGG_CACHE'] = '/tmp' # a writable directory 
 
 def load_default_auth():
